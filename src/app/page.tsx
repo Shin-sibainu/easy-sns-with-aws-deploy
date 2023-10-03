@@ -3,11 +3,16 @@ import Post from "./components/Post";
 import TweetInput from "./components/TweetInput";
 import { Post as PostType } from "@/utils/Types";
 
-export default async function Home() {
+const fetchAllBlogs = async () => {
   const allPosts = await fetch(`http://localhost:3000/api/post`, {
     cache: "no-store",
   });
-  const res = await allPosts.json();
+
+  return await allPosts.json();
+};
+
+export default async function Home() {
+  const res = await fetchAllBlogs();
 
   return (
     <div className="min-h-screen bg-gray-800 p-4 flex flex-col items-center sm:p-12">
@@ -23,7 +28,7 @@ export default async function Home() {
 
         {/* Post */}
         <div className="mt-6">
-          {res.allPosts.map((post: PostType) => (
+          {res.allPosts?.map((post: PostType) => (
             <Post key={post.id} post={post} />
           ))}
         </div>

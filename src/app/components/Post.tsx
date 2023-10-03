@@ -1,29 +1,34 @@
 "use client";
-import { Post } from "@/utils/Types";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { easeOut } from "framer-motion/dom";
+import { Post } from "@/utils/Types";
 
 type PostProps = {
   post: Post;
 };
 
-const Post = ({ post }: PostProps) => {
-  const [isLiked, setIsLiked] = useState<boolean>(false); // Likeの状態を管理するstate
-  const [likes, setLikes] = useState<number>(post.likes); // Likeの状態を管理するstate
+const PostComponent = (props: PostProps) => {
+  const { post } = props;
+  // const [isLiked, setIsLiked] = useState<boolean>(false); // Likeの状態を管理するstate
+  // const [likes, setLikes] = useState<number>(post.likes); // Likeの状態を管理するstate
 
-  const toggleLike = async () => {
-    setIsLiked(!isLiked); // Likeの状態をトグルする
-    // ここで必要に応じて、いいね数を更新したり、APIにリクエストを送ったりできます。
-    const editPost = await fetch(`http://localhost:3000/api/post/${post.id}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: post.id }),
-    });
+  // const toggleLike = async () => {
+  //   setIsLiked(!isLiked); // Likeの状態をトグルする
+  //   // ここで必要に応じて、いいね数を更新したり、APIにリクエストを送ったりできます。
+  //   const editPost = await fetch(`http://localhost:3000/api/post/`, {
+  //     method: "PUT",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ id: post.id }),
+  //   });
+  //   console.log(editPost);
 
-    const { post: updatedPost } = await editPost.json();
-    setLikes(updatedPost.likes);
-  };
+  //   if (editPost.ok) {
+  //     const { post: updatedPost } = await editPost.json();
+  //     console.log(updatedPost);
+  //     // setLikes(updatedPost.likes);
+  //   }
+  // };
 
   return (
     <motion.div
@@ -37,7 +42,7 @@ const Post = ({ post }: PostProps) => {
         <small className="text-gray-600 font-medium mr-2">
           {new Date(post.createdAt).toLocaleString("ja-JP")}
         </small>
-        <button onClick={toggleLike} className="rounded-full p-0.5">
+        {/* <button className="rounded-full p-0.5">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="red"
@@ -54,10 +59,10 @@ const Post = ({ post }: PostProps) => {
             />
           </svg>
         </button>
-        <span>{likes}</span>
+        <span>{likes}</span> */}
       </div>
     </motion.div>
   );
 };
 
-export default Post;
+export default PostComponent;

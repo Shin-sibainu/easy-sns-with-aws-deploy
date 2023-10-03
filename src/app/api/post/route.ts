@@ -15,6 +15,7 @@ export async function GET(request: Request, response: NextResponse) {
 export async function POST(request: Request, response: NextResponse) {
   try {
     const body = await request.json();
+    console.log(request);
     const post = await primsa.post.create({
       data: {
         content: body.content,
@@ -27,3 +28,22 @@ export async function POST(request: Request, response: NextResponse) {
     await primsa.$disconnect();
   }
 }
+
+// export async function PUT(request: Request, response: NextResponse) {
+//   try {
+//     console.log(request.url);
+//     const body = await request.json();
+//     console.log(body);
+//     const postId = Number(body.id);
+//     console.log(postId);
+//     const post = await primsa.post.update({
+//       where: { id: postId },
+//       data: { likes: { increment: 1 } },
+//     });
+//     return NextResponse.json({ message: "Success", post });
+//   } catch (err) {
+//     return NextResponse.json({ message: "Error", err });
+//   } finally {
+//     await primsa.$disconnect();
+//   }
+// }

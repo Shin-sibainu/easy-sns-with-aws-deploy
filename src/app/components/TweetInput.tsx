@@ -2,33 +2,41 @@
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
+const postTweet = async (inputValue: string) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/post`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ content: inputValue }),
+    });
+    // console.log(inputValue);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 const TweetInput = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const router = useRouter();
 
-  const postTweet = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const res = await fetch(`http://localhost:3000/api/post`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: inputValue }),
-      });
-      if (res.ok) {
-        // 投稿成功後、inputのvalueを空にする
-        setInputValue(""); // 投稿成功後、inputのvalueを空にする
-        router.refresh();
-      } else {
-        console.error("Error posting tweet", await res.json());
-      }
-    } catch (error) {
-      console.error("Error posting tweet", error);
+
+    if (inputValue.trim() === "") {
+      return;
     }
+
+    postTweet(inputValue);
+    setInputValue("");
+
+    router.refresh();
   };
 
   return (
     <>
-      <form onSubmit={postTweet}>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           className="w-full p-4 rounded-md outline-none border-2 border-transparent focus:border-orange-500 focus:ring-1  placeholder-gray-500 text-gray-700"
